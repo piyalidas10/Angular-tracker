@@ -34,6 +34,65 @@ export class TrackingDirective {
 ## Tacking from TS file
 ![Tracking TS](tracking_ts.png)
 
+app.component.ts
+```
+export class AppComponent {
+  title = 'angular-tracker';
+  data: User[];
+  customValue = {
+    statusText: '',
+    message: ''
+  };
+  constructor(
+    private apiService: ApiService,
+    private trackingService: TrackingService) {
+    this.callAPI();
+  }
+
+  callAPI() {
+    
+      this.apiService
+        .getUsers()
+        .pipe(
+          catchError((error) => {
+            this.customValue = {
+              statusText: error.statusText,
+              message: error.message
+            };
+            this.trackingService.track('user-API', `user-API-error-${error.status}`, JSON.stringify(this.customValue));
+            return throwError(error);
+          })
+        )
+        .subscribe({
+          next: (data) => {
+            if (data?.length > 0) {
+              console.log('API Response => ', data);
+              this.customValue = {
+                statusText: '200',
+                message: 'Data found'
+              };
+              this.trackingService.track('user-API', 'user-API-success', JSON.stringify(this.customValue));
+              this.data = data;
+            } else {
+              this.customValue = {
+                statusText: '200',
+                message: 'Data not found'
+              };
+              this.trackingService.track('user-API', `user-API-repone-blank`, JSON.stringify(this.customValue));
+              console.log('Blank reponse');
+            }
+          },
+        });
+  }
+}
+```
+
+## Tracking Service
+- Initialize tracking service using initialize() to be active when angular application is loaded.
+* track function by passing actionGroup name, trackingId (component / action decription) and customValue (optional).
++ track function is calling buildEvent function to create request body to call callToTrackAPI function
++ callToTrackAPI stores data in database
+
 ```
 export class TrackingService {
   public initialized = false;
