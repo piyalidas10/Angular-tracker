@@ -26,8 +26,8 @@ export class TrackingService {
     this.initialized = true;
   }
 
-  public track(actionGroup: string, trackingId: string, customValue?: string) {
-    const event = this.buildEvent(actionGroup, trackingId, customValue ? customValue : '');
+  public track(actionName: string, trackingId: string, customValue?: string) {
+    const event = this.buildEventRequest(actionName, trackingId, customValue ? customValue : '');
     console.log('Track event => ', event);
     this.callToTrackAPI(event).pipe(
       timeout(300),
@@ -44,8 +44,8 @@ export class TrackingService {
     return this.http.post(this.trackingUrl, event, { headers });
   }
 
-  private buildEvent(
-    actionGroup: string,
+  private buildEventRequest(
+    actionName: string,
     trackingId: string,
     customValue: string
   ) {
@@ -55,13 +55,13 @@ export class TrackingService {
     }
     const key = this.keyBuilder(
       AppInfo.appName,
-      actionGroup,
+      actionName,
       trackingId,
       page
     );
     return this.createTrackEvent(
       key,
-      actionGroup,
+      actionName,
       trackingId,
       page,
       customValue
@@ -70,7 +70,7 @@ export class TrackingService {
 
   private createTrackEvent(
     key: string,
-    actionGroup: string,
+    actionName: string,
     trackingId: string,
     page: string | null,
     customValue?: string
@@ -81,17 +81,17 @@ export class TrackingService {
     result.sequence = this.sharedService.getTrackingSequence();
     result.created = this.sharedService.getCurrentTime();
     result.customValue = customValue ? customValue : '';
-    result.value = this.createTrackEventValue(actionGroup, trackingId, page);
+    result.value = this.createTrackEventValue(actionName, trackingId, page);
     return result;
   }
 
   createTrackEventValue(
-    actionGroup: string,
+    actionName: string,
     trackingId: string,
     page: string | null
   ): TrackEventValue {
     const trackEventValue = new TrackEventValue();
-    trackEventValue.action = actionGroup;
+    trackEventValue.action = actionName;
     trackEventValue.component = trackingId;
     trackEventValue.page = page;
     trackEventValue.app = AppInfo.appName;
@@ -101,11 +101,11 @@ export class TrackingService {
 
   private keyBuilder(
     appName: string,
-    actionGroup: string,
+    actionName: string,
     trackingId: string,
     page: string | null
   ): string {
-    return `${appName} -> ${page} -> ${actionGroup} -> ${trackingId}`;
+    return `${appName} -> ${page} -> ${actionName} -> ${trackingId}`;
   }
 
   pageBuilder(pageName: string) {

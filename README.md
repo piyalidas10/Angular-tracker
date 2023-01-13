@@ -6,6 +6,7 @@ Also you can save the user activity data in database by calling tracking API.
 
 There have two ways by which you can track user activities. 1. calling track function from TS file 2. Pass data through tracking directive
 
+[![Open in StackBlitz]](https://stackblitz.com/edit/angular-ivy-fhfbv6?embed=1&file=src/app/app.component.ts)
 
 ## Tracking directive
 You can pass trackingId or componentName. calling track function using @HostListener for Click event
@@ -89,8 +90,8 @@ export class AppComponent {
 
 ## Tracking Service
 - Initialize tracking service using initialize() to be active when angular application is loaded.
-* track function by passing actionGroup name, trackingId (component / action decription) and customValue (optional).
-+ track function is calling buildEvent function to create request body to call callToTrackAPI function
+* track function by passing actionName name, trackingId (component / action decription) and customValue (optional).
++ track function is calling buildEventRequest function to create request body to call callToTrackAPI function
 + callToTrackAPI stores data in database
 
 ```
@@ -111,8 +112,8 @@ export class TrackingService {
     this.initialized = true;
   }
 
-  public track(actionGroup: string, trackingId: string, customValue?: string) {
-    const event = this.buildEvent(actionGroup, trackingId, customValue ? customValue : '');
+  public track(actionName: string, trackingId: string, customValue?: string) {
+    const event = this.buildEventRequest(actionName, trackingId, customValue ? customValue : '');
     console.log('Track event => ', event);
     this.callToTrackAPI(event).pipe(
       timeout(300),
@@ -129,8 +130,8 @@ export class TrackingService {
     return this.http.post(this.trackingUrl, event, { headers });
   }
 
-  private buildEvent(
-    actionGroup: string,
+  private buildEventRequest(
+    actionName: string,
     trackingId: string,
     customValue: string
   ) {
@@ -140,13 +141,13 @@ export class TrackingService {
     }
     const key = this.keyBuilder(
       AppInfo.appName,
-      actionGroup,
+      actionName,
       trackingId,
       page
     );
     return this.createTrackEvent(
       key,
-      actionGroup,
+      actionName,
       trackingId,
       page,
       customValue
@@ -155,7 +156,7 @@ export class TrackingService {
 
   private createTrackEvent(
     key: string,
-    actionGroup: string,
+    actionName: string,
     trackingId: string,
     page: string | null,
     customValue?: string
@@ -166,17 +167,17 @@ export class TrackingService {
     result.sequence = this.sharedService.getTrackingSequence();
     result.created = this.sharedService.getCurrentTime();
     result.customValue = customValue ? customValue : '';
-    result.value = this.createTrackEventValue(actionGroup, trackingId, page);
+    result.value = this.createTrackEventValue(actionName, trackingId, page);
     return result;
   }
 
   createTrackEventValue(
-    actionGroup: string,
+    actionName: string,
     trackingId: string,
     page: string | null
   ): TrackEventValue {
     const trackEventValue = new TrackEventValue();
-    trackEventValue.action = actionGroup;
+    trackEventValue.action = actionName;
     trackEventValue.component = trackingId;
     trackEventValue.page = page;
     trackEventValue.app = AppInfo.appName;
@@ -186,11 +187,11 @@ export class TrackingService {
 
   private keyBuilder(
     appName: string,
-    actionGroup: string,
+    actionName: string,
     trackingId: string,
     page: string | null
   ): string {
-    return `${appName}.${page}.${actionGroup}.${trackingId}`;
+    return `${appName} -> ${page} -> ${actionName} -> ${trackingId}`;
   }
 
   pageBuilder(pageName: string) {
