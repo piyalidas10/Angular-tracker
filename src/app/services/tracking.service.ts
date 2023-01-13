@@ -1,40 +1,14 @@
-# Angular Tracking User Activity
-User activity tracking is the process of monitoring, collecting, and analyzing visitor browsing behavior on a website or app.
-Using this customize use activity tracker, you can track user's events like clicking, mouseover, API calling etc. You can modify further as per your requirements.
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { of } from 'rxjs';
+import { timeout, catchError } from 'rxjs/operators';
+import { TrackEvent } from '../models/track-event';
+import { TrackEventValue } from '../models/track-event-value';
+import { SharedService } from './shared.service';
+import { AppInfo } from '../config/appinfo';
 
-Also you can save the user activity data in database by calling tracking API.
+@Injectable({ providedIn: 'root' })
 
-There have two ways by which you can track user activities. 1. calling track function from TS file 2. Pass data through tracking directive
-
-
-## Tracking directive
-You can pass trackingId or componentName. calling track function using @HostListener for Click event
-![Tracking directive](tracking_directive.png)
-
-```
-import { Directive, HostListener, Input } from '@angular/core';
-import { TrackingService } from '../services/tracking.service';
-
-@Directive({
-  selector: '[appTracking]'
-})
-export class TrackingDirective {
-  @Input() componentName: string;
-  @Input() trackingId: string;
-
-  constructor(private trackingService: TrackingService) { }
-
-  @HostListener('click', ['$event']) clickEvent(event: any) {
-    this.trackingService.track(event.type, this.trackingId? this.trackingId: this.componentName);
-  }
-
-}
-```
-
-## Tacking from TS file
-![Tracking TS](tracking_ts.png)
-
-```
 export class TrackingService {
   public initialized = false;
 
@@ -131,7 +105,7 @@ export class TrackingService {
     trackingId: string,
     page: string | null
   ): string {
-    return `${appName}.${page}.${actionGroup}.${trackingId}`;
+    return `${appName} -> ${page} -> ${actionGroup} -> ${trackingId}`;
   }
 
   pageBuilder(pageName: string) {
@@ -144,4 +118,3 @@ export class TrackingService {
     }
   }
 }
-```

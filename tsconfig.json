@@ -6,6 +6,12 @@
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,
     "strict": true,
+    /*
+    //  -------------- strictPropertyInitialization --------------
+        To fix error "Property 'action' has no initializer and is not definitely assigned in the constructor". 
+        Otherwise you need to initialize all your variables which is a little bit annoying
+    */
+    "strictPropertyInitialization": false,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "sourceMap": true,
