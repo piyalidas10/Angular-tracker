@@ -6,7 +6,7 @@ Also you can save the user activity data in database by calling tracking API.
 
 There have two ways by which you can track user activities. 1. calling track function from TS file 2. Pass data through tracking directive
 
-[![Open in StackBlitz]](https://stackblitz.com/edit/angular-ivy-fhfbv6?embed=1&file=src/app/app.component.ts)
+[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/edit/angular-ivy-fhfbv6?embed=1&file=src/app/app.component.ts)
 
 ## Tracking directive
 You can pass trackingId or componentName. calling track function using @HostListener for Click event
