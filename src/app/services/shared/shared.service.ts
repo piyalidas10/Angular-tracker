@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Endpoint } from '../config/endpoint';
+import { Endpoint } from '../../config/endpoint';
 
 @Injectable({ providedIn: 'root' })
 export class SharedService {
@@ -29,7 +29,8 @@ export class SharedService {
     this.setSessionstorageItem('TRACK_SEQ', newSequence.toString());
     return newSequence;
   }
-  getTrackingUrl() {
-    return `${Endpoint.originApi}${Endpoint.trackingUrl}`;
+  getTrackingUrl(): string {
+    // return `${Endpoint.originApi}${Endpoint.trackingUrl}`;
+    return `${Endpoint.trackingUrl}`;
   }
 }

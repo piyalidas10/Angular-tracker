@@ -1,1 +1,33 @@
-<button appTracking [trackingId]="'clickbutton'">CLick</button>
+<button appTracking [trackingId]="'clickbutton'" (click)="callUsers()">Show Users</button>
+
+<ng-container *ngIf="isBtnCLicked">
+    <ng-container *ngIf="isLoading$ | async; else hideLoader">
+    <app-loader [isLoading]="true" [message]="'Loading data ...'"></app-loader>
+    </ng-container>
+    <ng-template #hideLoader>
+    <ng-container *ngIf="(errorMsg$ | async) !== '' ; else showUsers">
+        <div class="error"> {{(errorMsg$ | async)}} </div>
+    </ng-container>
+    <ng-template #showUsers>
+        <ng-container *ngIf="users; else noUsers">
+        <h1>User's Table</h1>
+        <table>
+            <tr>
+            <th>Name</th>
+            <th>Email Id</th>
+            <th>Phone</th>
+            </tr>
+            <tr *ngFor="let user of users">
+            <td>{{user.name}}</td>
+            <td>{{user.email}}</td>
+            <td>{{user.phone}}</td>
+            </tr>
+        </table>
+        </ng-container>
+
+        <ng-template #noUsers>
+        <h5>No users found</h5>
+        </ng-template>
+    </ng-template>
+    </ng-template>
+</ng-container>

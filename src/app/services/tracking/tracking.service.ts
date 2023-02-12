@@ -2,10 +2,10 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { of } from 'rxjs';
 import { timeout, catchError } from 'rxjs/operators';
-import { TrackEvent } from '../models/track-event';
-import { TrackEventValue } from '../models/track-event-value';
-import { SharedService } from './shared.service';
-import { AppInfo } from '../config/appinfo';
+import { TrackEvent } from '../../models/track-event';
+import { TrackEventValue } from '../../models/track-event-value';
+import { SharedService } from '../shared/shared.service';
+import { AppInfo } from '../../config/appinfo';
 
 @Injectable({ providedIn: 'root' })
 
@@ -36,12 +36,24 @@ export class TrackingService {
   }
 
   private callToTrackAPI(event: TrackEvent) {
-    if (!this.initialize || this.trackingUrl?.indexOf('undefined') >= 0) {
+    if (!this.initialize || this.trackingUrl.indexOf('undefined') >= 0) {
       return of({});
     }
     // Call API to save tracking data in database
     const headers = new HttpHeaders().set('Content-type', 'application/json');
-    return this.http.post(this.trackingUrl, event, { headers });
+    const req = {
+      "userId": "019mr8mf4r",
+      "event": "Item Purchased",
+      "properties": {
+        "name": "Leap to Conclusions Mat",
+        "revenue": 14.99
+      },
+      "context": {
+        "ip": "24.5.68.47"
+      },
+      "timestamp": "2012-12-02T00:30:12.984Z"
+    };
+    return this.http.post(this.trackingUrl, req, { headers });
   }
 
   private buildEventRequest(
@@ -50,7 +62,7 @@ export class TrackingService {
     customValue: string
   ) {
     const page = this.pageBuilder(location.pathname);
-    if (!trackingId) {
+    if (trackingId.trim() === '') {
       trackingId = 'component-undefined';
     }
     const key = this.keyBuilder(
