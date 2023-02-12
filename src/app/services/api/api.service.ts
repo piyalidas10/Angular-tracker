@@ -14,7 +14,7 @@ export class ApiService {
 
   getUsers(): Observable<User[]> {
     this.users = this.http
-      .get<User[]>(`${Endpoint.originApi}/user`)
+      .get<User[]>(`${Endpoint.originApi}/users`)
       .pipe(shareReplay(1));
     return this.users;
   }
