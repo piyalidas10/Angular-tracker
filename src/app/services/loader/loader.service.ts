@@ -9,11 +9,11 @@ export class LoaderService {
   public isLoading$ = this.isLoading.asObservable();
   constructor() { }
 
-  loaderShow() {
+  loaderShow(): void {
     this.isLoading.next(true);
   }
 
-  loaderHide() {
+  loaderHide(): void {
     this.isLoading.next(false);
   }
 }

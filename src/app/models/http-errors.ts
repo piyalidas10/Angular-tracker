@@ -1,7 +1,7 @@
-export const HttpErrors = {
-    400: 'Bad Request',
-    401: 'Unauthorized',
-    403: 'Forbidden',
-    404: 'Not Found',
-    500: 'Internal Server Error'
+export const HttpErrors: Record<string, string> = {
+    400: 'Bad Request : put your message here',
+    401: 'Unauthorized : put your message here',
+    403: 'Forbidden : put your message here',
+    404: 'Not Found : put your message here',
+    500: 'Internal Server Error : put your message here',
 }

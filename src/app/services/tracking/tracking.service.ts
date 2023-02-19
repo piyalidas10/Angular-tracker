@@ -26,7 +26,7 @@ export class TrackingService {
     this.initialized = true;
   }
 
-  public track(actionName: string, trackingId: string, customValue?: string) {
+  public track(actionName: string, trackingId: string, customValue?: string | undefined) {
     const event = this.buildEventRequest(actionName, trackingId, customValue ? customValue : '');
     console.log('Track event => ', event);
     this.callToTrackAPI(event).pipe(
@@ -120,7 +120,7 @@ export class TrackingService {
     return `${appName} -> ${page} -> ${actionName} -> ${trackingId}`;
   }
 
-  pageBuilder(pageName: string) {
+  pageBuilder(pageName: string): string | null {
     const regex = /\/([a-zA-Z]+).*/;
     if (pageName === '/') {
       return 'home';

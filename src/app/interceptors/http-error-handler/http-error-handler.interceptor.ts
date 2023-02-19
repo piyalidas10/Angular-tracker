@@ -36,19 +36,19 @@ export class HttpErrorHandlerInterceptor implements HttpInterceptor {
    private displayServerErrorMessage(error: HttpErrorResponse): string {
     switch (error.status) {
       case 400: {
-        return `${HttpErrors[400]}: put your message here`;
+        return `${HttpErrors[400]}`;
       }
       case 401: {
-        return `${HttpErrors[401]}: put your message here`;
+        return `${HttpErrors[401]}`;
       }
       case 403: {
-        return `${HttpErrors[403]}: put your message here`;
+        return `${HttpErrors[403]}`;
       }
       case 404: {
-        return `${HttpErrors[404]}: put your message here`;
+        return `${HttpErrors[404]}`;
       }
       case 500: {
-        return `${HttpErrors[500]}: put your message here`;
+        return `${HttpErrors[500]}`;
       }
       default: {
         return `Please Try Again Later`;

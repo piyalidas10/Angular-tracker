@@ -9,7 +9,7 @@ export class ErrorShowService {
   public errorMsg$ = this.errorMsg.asObservable();
   constructor() { }
 
-  errorShow(msg: string) {
+  errorShow(msg: string): void {
     this.errorMsg.next(msg);
   }
 }
